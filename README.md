@@ -1,6 +1,5 @@
 # deepAV  
-### deep audio-visual pipeline
-  
+### deep audio-visual pipeline  
 (c) Austin Marcus, October 2018
 -------------------------------
 
