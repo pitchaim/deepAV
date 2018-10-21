@@ -127,7 +127,7 @@ class MFCC_Learn():
             self.conv4 = nn.Conv2d(4, 4, (4,4))
             self.relu4 = nn.ReLU()
             self.pool2 = nn.MaxPool2d()
-            self.fc1 = nn.Linear(980, 600)
+            self.fc1 = nn.Linear(108*981, 600)
             self.fc2 = nn.Linear(600, 400)
             self.fc3 = nn.Linear(400, nLabel)
             self.softmax = nn.Softmax2d()
@@ -181,7 +181,6 @@ class MFCC_Learn():
                     for e in range(train_epochs):
                         for i, sample in enumerate(train_x):
                             inputv = Variable(torch.FloatTensor(sample)).view(1, 1, -1)
-                            inputv.size()
                             labelsv = Variable(torch.FloatTensor(train_y[i]))
                             output = self.net(inputv)
                             loss = criterion(output, labelsv)
@@ -250,9 +249,36 @@ class AV_Learn():
         def __init__(self):
             super(_classifier2, self).__int__()
             #convolve over original MFCC 128x1001 image
+            self.conv1 = nn.Conv2d(1, 4, (10,10))
+            self.relu1 = nn.ReLU()
+            self.conv2 = nn.Conv2d(4, 4, (6,6))
+            self.relu2 = nn.ReLU()
+            self.pool1 = nn.MaxPool2d(2)
+            self.conv3 = nn.Conv2d(4, 4, (4,4))
+            self.relu3 = nn.ReLU()
+            self.conv4 = nn.Conv2d(4, 4, (4,4))
+            self.relu4 = nn.ReLU()
+            self.pool2 = nn.MaxPool2d()
+            self.fc1 = nn.Linear(108*981, 4000)
+            self.fc2 = nn.Linear(4000, 2000)
+            self.fc3 = nn.Linear(2000, 1000)
 
         def forward(self, input):
-            pass
+            x = self.conv1(input)
+            x = self.relu1(x)
+            x = self.conv2(x)
+            x = self.relu2(x)
+            x = self.pool1(x)
+            x = self.conv3(x)
+            x = self.relu3(x)
+            x = self.conv4(x)
+            x = self.relu4(x)
+            x = self.pool2(x)
+            x = x.view(-1, self.num_flat_features(x))
+            x = F.relu(self.fc1(x))
+            x = F.relu(self.fc2(x))
+            x = self.fc3(x)
+            return x
 
 #Run the damn thing
 if __name__=="__main__":
