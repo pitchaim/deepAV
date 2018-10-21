@@ -1,0 +1,29 @@
+Deep AV pipeline - simplest approach
+
+Austin Marcus
+10/20/2018
+
+Design:
+-------
+
+Input module:
+    Audio classification system
+    - MFCC extraction from audio samples
+    - Semi-deep convolutional net learning MFCCs to categories
+    - Pre-trained vision net
+    - Shallow net learning audio - image features
+   [- future: generative network to reconstruct image predictions for unseen sounds]
+
+Experiment (need to disentangle):
+---------------------------------
+
+    Train system for 3 categories (represented as 3-unit 1-hot vector): happy, sad, neutral
+    Categorize [1000] sound samples as happy, sad, or neutral, and choose images accordingly.
+    Extract MFCCs from all sound samples. Convolve over MFCC features as matrices (i.e. no frequency windowing or sequential dependency, e.g. LSTM)
+    to learn category membership, with [400]-dimensional layer as feature learning target, followed by
+    3-unit penultimate layer and softmax layer for category membership targets.
+    Run k-fold cross-validation for train/test robustness on held-out examples.
+    Run images through pre-trained network (e.g. AlexNet on ImageNet), extract features from penultimate layer projections.
+    Set up shallow network to learn mappings from audio features to image features.
+    Run k-fold cross-validation on held-out examples.
+    Pipe in new sounds and see what happens!  
