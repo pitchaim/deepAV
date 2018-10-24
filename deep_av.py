@@ -83,7 +83,7 @@ class Feature_Extraction():
            transforms.ToTensor(),
            normalize
         ])
-        net = models.vgg16(pretrained=True)
+        net = models.vgg16(pretrained=True) # don't do this on every image iteration!! Nooo! Initialize on class init...
         #remove last FC layer
         new_classifier = nn.Sequential(*list(net.classifier.children())[:-1])
         net.classifier = new_classifier
